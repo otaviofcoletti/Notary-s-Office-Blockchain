@@ -1,67 +1,3 @@
-// SPDX-License-Identifier: MIT 
-pragma solidity ^0.8.0; 
- 
-contract Pessoa { 
- 
-    address public cartorioAddress; 
- 
-    constructor(address _cartorioAddress) { 
-        cartorioAddress = _cartorioAddress; 
-    } 
- 
-    function CriarRG() external payable  { 
-
-        require(msg.value > 0, "O valor pago deve ser maior que zero");
-        address payable beneficiario = payable(0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db);
-        beneficiario.transfer(msg.value);
-
-        Cartorio cartorio = Cartorio(cartorioAddress); 
-        cartorio.GerarRG(address(this)); 
-    }
- 
-    function pedidoCasamento(address conjuge) external payable  { 
-
-        require(msg.value > 0, "O valor pago deve ser maior que zero");
-        address payable beneficiario = payable(0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db);
-        beneficiario.transfer(msg.value);
-        Cartorio cartorio = Cartorio(cartorioAddress); 
-        cartorio.PedidoCasamento(address(this), conjuge); 
-    }
-   
-    function TirarCNH() external payable  {
-
-        require(msg.value > 0, "O valor pago deve ser maior que zero");
-        address payable beneficiario = payable(0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db);
-        beneficiario.transfer(msg.value);
-
-        Cartorio cartorio = Cartorio(cartorioAddress); 
-        cartorio.GerarCNH(address(this));
-    }
- 
-    function queryRG(address consulta) public view returns (uint) { 
-        Cartorio cartorio = Cartorio(cartorioAddress); 
-        return cartorio.GetRG(consulta); 
-    } 
- 
-    function queryCNH(address consulta) public view returns (uint) { 
-        Cartorio cartorio = Cartorio(cartorioAddress); 
-        return cartorio.GetCNH(consulta); 
-    } 
- 
-    function queryParceiro(address consulta) public view returns (address) { 
-        Cartorio cartorio = Cartorio(cartorioAddress); 
-        return cartorio.GetCasado(consulta); 
-    } 
- 
-    function queryPedido(address consulta) public view returns (address) { 
-        Cartorio cartorio = Cartorio(cartorioAddress); 
-        return cartorio.GetPedidoCasamento(consulta); 
-    }
-
-
- 
-} 
- 
 // Contrato Cartorio 
 contract Cartorio { 
  
@@ -104,7 +40,7 @@ contract Cartorio {
         require(cnh[pessoaAddress] == 0, "CNH already generated for this person"); 
         counterCNH = counterCNH + 1; 
         cnh[pessoaAddress] = counterCNH; 
-    }
+    } 
  
     function PedidoCasamento(address pessoaAddress, address conjuge) public { 
         require(casados[pessoaAddress] == address(0), "Nao pode ja estar casado"); 
@@ -125,6 +61,5 @@ contract Cartorio {
             return "pedido cancelado com sucesso"; 
         } 
         return "Nenhum pedido ativo"; 
-    }
-
+    } 
 }
